@@ -31,6 +31,7 @@ app.get('/posts/new', (req, res) => {
   console.log("iahlibhjawrgbha")
 })
 
+
 app.listen(port, () => {
   console.log(`We Gucci at http://localhost:${port}`)
 })
