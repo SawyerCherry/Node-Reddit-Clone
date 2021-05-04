@@ -18,6 +18,7 @@ app.use(expressValidator());
 
 
 require('./controllers/posts.js')(app);
+require('./controllers/comments.js')(app);
 // Set db
 require('./data/reddit-db');
 
@@ -35,5 +36,11 @@ app.get('/posts/new', (req, res) => {
 app.listen(port, () => {
   console.log(`We Gucci at http://localhost:${port}`)
 })
+
+
+
+
+
+
 
 module.exports = app;
