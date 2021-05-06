@@ -22,7 +22,7 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(expressValidator())
-
+app.use(express.static('public'));
 require('./data/reddit-db')
 
 var checkAuth = (req, res, next) => {
@@ -42,7 +42,7 @@ app.use(checkAuth);
 require('./controllers/posts.js')(app)
 require('./controllers/comments.js')(app);
 require('./controllers/auth.js')(app);
-
+require('./controllers/replies.js')(app);
 
 
 //Routes

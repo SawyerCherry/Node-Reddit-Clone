@@ -17,12 +17,11 @@
 
 <div class="row justify-content-center">
   <div class="col-sm-6 col-sm-offset-3">
-    <strong>Comments: </strong> 
+    <strong>Comments: </strong>
     <br>
     <br>
-    {{#each post.comments}} 
-      <p>{{this.content}}</p>
-      <p class="text-right">{{this.author.username}}</p>
+    {{#each post.comments}}
+    {{> comment comment=this postId=../post._id}}
     {{/each}}
-  </div> 
+  </div>
 </div>
