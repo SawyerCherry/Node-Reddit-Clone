@@ -1,52 +1,54 @@
-require('dotenv').config();
+require("dotenv").config()
+
 const express = require('express')
-const port = 3000
-const exphbs  = require('express-handlebars');
-const bodyParser = require('body-parser');
-const expressValidator = require('express-validator');
+const bodyParser = require('body-parser')
+const expressValidator = require('express-validator')
+const Post = require('./models/post');
 
 var cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+
+
 const app = express()
+
+//Middleware
+const exphbs = require('express-handlebars')
 
 app.use(cookieParser());
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.set('view engine', 'handlebars')
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(expressValidator())
 
+require('./data/reddit-db')
 
-// Use Body Parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+var checkAuth = (req, res, next) => {
+  console.log("Checking authentication");
+  if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
+    req.user = null;
+  } else {
+    var token = req.cookies.nToken;
+    var decodedToken = jwt.decode(token, { complete: true }) || {};
+    req.user = decodedToken.payload;
+  }
 
-// Add after body parser initialization!
-app.use(expressValidator());
+  next();
+};
+app.use(checkAuth);
 
-// require controllers
-require('./controllers/posts.js')(app);
+require('./controllers/posts.js')(app)
 require('./controllers/comments.js')(app);
 require('./controllers/auth.js')(app);
 
 
 
-// Set db
-require('./data/reddit-db');
+//Routes
 
-
-app.get('/', (req, res) => {
-  res.render('home')
+//Start Server
+app.listen(3000, () => {
+    console.log('Listening on port localhost:3000')
 })
-
-app.get('/posts/new', (req, res) => {
-  res.render('posts-new')
-  console.log("iahlibhjawrgbha")
-})
-
-
-app.listen(port, () => {
-  console.log(`We Gucci at http://localhost:${port}`)
-})
-
-
-module.exports = app;
+module.exports = app

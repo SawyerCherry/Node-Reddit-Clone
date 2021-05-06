@@ -1,7 +1,8 @@
-const Comment = require('../models/comment');
 const Post = require('../models/post');
+const Comment = require('../models/comment');
 
 module.exports = function (app) {
+
     // CREATE Comment
     app.post("/posts/:postId/comments", function (req, res) {
         // INSTANTIATE INSTANCE OF MODEL
@@ -14,7 +15,7 @@ module.exports = function (app) {
                 return Post.findById(req.params.postId);
             })
             .then(post => {
-                post.comments.unshift(comment); 
+                post.comments.unshift(comment);
                 return post.save();
             })
             .then(post => {
@@ -25,6 +26,4 @@ module.exports = function (app) {
             });
     });
 
-
-
-};
+}; 
