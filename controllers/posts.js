@@ -1,7 +1,14 @@
 const Post = require('../models/post');
 const User = require('../models/user');
 module.exports = app => {
+
   // CREATE
+
+  app.get('/posts/new', (req, res) => {
+    var currentUser = req.user
+    res.render('posts-new', { currentUser })
+  });
+
   app.post("/posts/new", (req, res) => {
     if (req.user) {
       var post = new Post(req.body);
@@ -26,13 +33,7 @@ module.exports = app => {
     }
   });
 
-
-  app.get('/posts/new', (req, res) => {
-    var currentUser = req.user
-    res.render('posts-new', { currentUser })
-  });
-
-
+  // INDEX
   app.get('/', (req, res) => {
     var currentUser = req.user;
     Post.find({}).populate('author').lean()
@@ -47,9 +48,7 @@ module.exports = app => {
   // SHOW
   app.get("/posts/:id", function (req, res) {
     var currentUser = req.user;
-    // LOOK UP THE POST
-
-    Post.findById(req.params.id).lean().populate({ path: 'comments', populate: { path: 'author' } }).populate('author')
+    Post.findById(req.params.id).populate('comments').lean()
       .then(post => {
         res.render("posts-show", { post, currentUser });
       })
@@ -61,7 +60,7 @@ module.exports = app => {
   // SUBREDDIT
   app.get("/n/:subreddit", function (req, res) {
     var currentUser = req.user;
-    Post.find({ subreddit: req.params.subreddit }).lean().populate('author')
+    Post.find({ subreddit: req.params.subreddit }).lean()
       .then(posts => {
         res.render("posts-index", { posts, currentUser });
       })
