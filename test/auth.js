@@ -8,6 +8,7 @@ chai.use(chaiHttp);
 const agent = chai.request.agent(server);
 
 const User = require("../models/user");
+const agent = chai.request.agent(app);
 
 describe("User", function () {
     // TESTS WILL GO HERE.
