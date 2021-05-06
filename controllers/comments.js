@@ -19,11 +19,11 @@ module.exports = function (app) {
                 return post.save();
             })
             .then(post => {
-                res.redirect(`/`);
+                res.redirect(`/posts/${req.params.postId}`);
             })
             .catch(err => {
                 console.log(err);
             });
     });
 
-}; 
+};
